@@ -569,7 +569,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_trainingLevel: {fileID: 11400000, guid: 5bd6ec44cc0f204499a0ec142212693b, type: 2}
-  m_btn: {fileID: 0}
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!1 &121484845
@@ -1016,7 +1015,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_trainingLevel: {fileID: 11400000, guid: 956ef7fe5fcf7374e96026d2c9602bf2, type: 2}
-  m_btn: {fileID: 0}
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!1 &159362383
@@ -1268,6 +1266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f9cc9b41488e743a8d2a99ea69a019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_strParamName: vital
 --- !u!1 &190853861
 GameObject:
   m_ObjectHideFlags: 0
@@ -3926,6 +3925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f9cc9b41488e743a8d2a99ea69a019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_strParamName: luck
 --- !u!1 &533566799
 GameObject:
   m_ObjectHideFlags: 0
@@ -4060,7 +4060,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_trainingLevel: {fileID: 11400000, guid: 5534e71a3c399db4e8e8a45a71254c23, type: 2}
-  m_btn: {fileID: 0}
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!1 &553136675
@@ -4257,6 +4256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f9cc9b41488e743a8d2a99ea69a019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_strParamName: strength
 --- !u!1 &581395445
 GameObject:
   m_ObjectHideFlags: 0
@@ -6413,6 +6413,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818407145}
   m_CullTransparentMesh: 0
+--- !u!1 &844264603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844264605}
+  - component: {fileID: 844264604}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &844264604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844264603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cac57d78ff77bde46903daca90026eae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_taMasterTraining: {fileID: 4900000, guid: 1ba6a80fa071d604dbdff2b1425d3a78, type: 3}
+--- !u!4 &844264605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844264603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 352.9556, y: 182.03067, z: -189.65625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &847103742
 GameObject:
   m_ObjectHideFlags: 0
@@ -6547,7 +6591,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_trainingLevel: {fileID: 11400000, guid: 6aab70f91fb8bc24e899dbc2ff6f202f, type: 2}
-  m_btn: {fileID: 0}
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!1 &881157691
@@ -7589,7 +7632,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_trainingLevel: {fileID: 11400000, guid: f2f8992267da02647ab2939e8de5ea76, type: 2}
-  m_btn: {fileID: 0}
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!1 &1070417408
@@ -10065,6 +10107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f9cc9b41488e743a8d2a99ea69a019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_strParamName: agility
 --- !u!1 &1419296029
 GameObject:
   m_ObjectHideFlags: 0
@@ -11827,12 +11870,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f6e92df5493e9a4aae1c05561c2a08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnBegin:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEnd:
-    m_PersistentCalls:
-      m_Calls: []
   m_hudGrow: {fileID: 1680410255}
 --- !u!4 &1626916796
 Transform:
@@ -12319,6 +12356,12 @@ MonoBehaviour:
   - {fileID: 533566804}
   - {fileID: 847103747}
   - {fileID: 1044300765}
+  m_iconStatusList:
+  - {fileID: 572331448}
+  - {fileID: 163862802}
+  - {fileID: 1398487190}
+  - {fileID: 1684186407}
+  - {fileID: 529199321}
 --- !u!1 &1684186403
 GameObject:
   m_ObjectHideFlags: 0
@@ -12411,6 +12454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f9cc9b41488e743a8d2a99ea69a019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_strParamName: wisdom
 --- !u!1 &1688223792
 GameObject:
   m_ObjectHideFlags: 0
