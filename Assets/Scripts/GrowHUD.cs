@@ -32,4 +32,12 @@ public class GrowHUD : MonoBehaviour
 		}
 	}
 
+	public void UpTrainingButton(TrainingLevel _trainingLevel)
+	{
+		foreach( BtnTraining btn in m_btnTrainingList)
+		{
+			btn.IsUp(btn.trainingLevel.training_type == _trainingLevel.training_type);
+		}
+	}
+
 }

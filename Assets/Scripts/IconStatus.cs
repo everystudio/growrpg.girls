@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Reflection;
 
 public class IconStatus : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class IconStatus : MonoBehaviour
 
     private void Awake()
     {
+        //Debug.Log("IconStatus.Awake");
         m_txtLabel = transform.Find("label").GetComponent<TextMeshProUGUI>();
         m_txtRank = transform.Find("txtRank").GetComponent<TextMeshProUGUI>();
         m_txtCurrnet = transform.Find("txtParam").GetComponent<TextMeshProUGUI>();
@@ -30,6 +32,7 @@ public class IconStatus : MonoBehaviour
         {
             strParam = "+" + _iParam.ToString();
         }
+        //Debug.Log(m_txtUp);
         m_txtUp.text = strParam;
     }
 
@@ -39,10 +42,19 @@ public class IconStatus : MonoBehaviour
         m_txtMax.text = "/456";
         //m_txtUp.text = "";
     }
+
     public void SetParam( int _iParam)
     {
         m_txtCurrnet.text = _iParam.ToString();
         m_txtRank.text = GetRank(_iParam);
+    }
+    public void SetParam( DataTrainingUnit _data)
+    {
+        FieldInfo info = _data.GetType().GetField(m_strParamName);
+        if (info != null)
+        {
+            SetParam((int)info.GetValue(_data));
+        }
     }
 
     public struct RankData
@@ -73,9 +85,6 @@ public class IconStatus : MonoBehaviour
         }
         return "none";
     }
-
-
-
 
     void Update()
     {

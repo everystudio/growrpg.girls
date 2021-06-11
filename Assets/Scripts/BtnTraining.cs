@@ -18,9 +18,11 @@ public class BtnTraining : MonoBehaviour
 	[HideInInspector] private Button m_btn;
 	[HideInInspector] public TextMeshProUGUI m_txtLevel;
 	[HideInInspector] public TextMeshProUGUI m_txtTrainingMenu;
+	private Animator m_animator;
 
 	private void Awake()
 	{
+		m_animator = GetComponent<Animator>();
 		m_btn = GetComponent<Button>();
 		m_btn.onClick.AddListener(() =>
 		{
@@ -38,6 +40,10 @@ public class BtnTraining : MonoBehaviour
 		p.training_level == m_trainingLevel.level);
 
 		m_txtTrainingMenu.text = param.training_name;
+	}
+	public void IsUp(bool _bFlag)
+	{
+		m_animator.SetBool("isUp", _bFlag);
 	}
 
 }
