@@ -12427,6 +12427,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f6e92df5493e9a4aae1c05561c2a08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  e:
+    m_PersistentCalls:
+      m_Calls: []
   m_hudGrow: {fileID: 1680410255}
   m_trainingUnit: {fileID: 11400000, guid: 162486775a0b77040904d9c812042805, type: 2}
 --- !u!4 &1626916796

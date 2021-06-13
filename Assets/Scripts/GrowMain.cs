@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using anogamelib;
 using System.Reflection;
 
 public class GrowMain : StateMachineBase<GrowMain>
 {
+	public UnityEvent e = new UnityEvent();
 	[SerializeField] GrowHUD m_hudGrow;
 	public DataTrainingUnit m_trainingUnit;
 	private void Awake()
