@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using anogamelib;
 
-public class DataUnitAttribute : ScriptableObject
+public class UnitProperty : CsvDataParam
 {
 	public int hp;
 	public int hp_max;
@@ -14,6 +15,4 @@ public class DataUnitAttribute : ScriptableObject
 	public int agility;
 	public int wisdom;
 	public int luck;
-
-
 }

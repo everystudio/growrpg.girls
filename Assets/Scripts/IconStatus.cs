@@ -48,7 +48,7 @@ public class IconStatus : MonoBehaviour
         m_txtCurrnet.text = _iParam.ToString();
         m_txtRank.text = GetRank(_iParam);
     }
-    public void SetParam( DataTrainingUnit _data)
+    public void SetParam( DataUnitTrainingParam _data)
     {
         FieldInfo info = _data.GetType().GetField(m_strParamName);
         if (info != null)

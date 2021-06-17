@@ -9,7 +9,14 @@ public class GrowMain : StateMachineBase<GrowMain>
 {
 	public UnityEvent e = new UnityEvent();
 	[SerializeField] GrowHUD m_hudGrow;
-	public DataTrainingUnit m_trainingUnit;
+	public DataUnitTrainingParam unitTrainingParam
+	{
+		get
+		{
+			return DataManager.Instance.unitTrainingParam;
+		}
+	}
+
 	private void Awake()
 	{
 		SetState(new GrowMain.Standby(this));
@@ -24,7 +31,6 @@ public class GrowMain : StateMachineBase<GrowMain>
 		{
 			base.OnUpdateState();
 			machine.SetState(new GrowMain.TopMenu(machine));
-
 		}
 	}
 
@@ -36,17 +42,24 @@ public class GrowMain : StateMachineBase<GrowMain>
 		}
 		public override void OnEnterState()
 		{
+			UIAssistant.Instance.ShowPage("main");
+
 			foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
 			{
 				icon.ShowUp(0);
-				icon.SetParam(machine.m_trainingUnit);
+				icon.SetParam(machine.unitTrainingParam);
 			}
-
-
 			machine.m_hudGrow.m_btnTraining.onClick.AddListener(() =>
 			{
 				machine.SetState(new GrowMain.TrainingList(machine));
 			});
+
+			// スタミナ(体力)の表示設定
+			machine.m_hudGrow.m_slStamina.Init(
+				DataManager.Instance.unitTrainingParam.stamina,
+				DataManager.Instance.unitTrainingParam.stamina_max
+				);
+
 		}
 		public override void OnExitState()
 		{
@@ -85,12 +98,9 @@ public class GrowMain : StateMachineBase<GrowMain>
 				else
 				{
 					m_selectTrainingLevel = value;
-
 					machine.m_hudGrow.UpTrainingButton(value);
-
 					MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
 					p.training_type == value.training_type && p.training_level == value.level);
-
 					foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
 					{
 						FieldInfo info = param.GetType().GetField(icon.paramName);
@@ -108,7 +118,6 @@ public class GrowMain : StateMachineBase<GrowMain>
 			machine.m_hudGrow.m_btnBack.onClick.RemoveAllListeners();
 			machine.m_hudGrow.OnTrainingLevel.RemoveAllListeners();
 		}
-
 	}
 
 	private class TrainingExe : StateBase<GrowMain>
@@ -121,7 +130,26 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public override void OnEnterState()
 		{
 			base.OnEnterState();
+			Debug.Log(m_trainingLevel.training_name);
+			Debug.Log(m_trainingLevel.level);
 
+			MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
+			p.training_type == m_trainingLevel.training_type && p.training_level == m_trainingLevel.level);
+
+			machine.unitTrainingParam.BuildTraining(param);
+
+			DataManager.Instance.unitTrainingParam.stamina += param.training_cost;
+			machine.m_hudGrow.m_slStamina.SetValue(
+				DataManager.Instance.unitTrainingParam.stamina
+			);
+
+			foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
+			{
+				icon.ShowUp(0);
+				icon.SetParam(machine.unitTrainingParam);
+			}
+
+			machine.SetState(new GrowMain.TopMenu(machine));
 		}
 
 	}

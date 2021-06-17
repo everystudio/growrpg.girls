@@ -13,6 +13,8 @@ public class GrowHUD : MonoBehaviour
 
 	public List<IconStatus> m_iconStatusList;
 
+	public SliderController m_slStamina;
+
 	private void Awake()
 	{
 		foreach(BtnTraining btnTraining in m_btnTrainingList)
