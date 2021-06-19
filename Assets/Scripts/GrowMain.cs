@@ -22,6 +22,16 @@ public class GrowMain : StateMachineBase<GrowMain>
 		SetState(new GrowMain.Standby(this));
 	}
 
+	private int CalcFailRate(TrainingLevel _level, int _iStamina)
+	{
+		int iFailRate = 0;
+		if (_iStamina < _level.fail_start)
+		{
+			iFailRate = (int)Mathf.Lerp(99, 0, (float)_iStamina / (float)_level.fail_start);
+		}
+		return iFailRate;
+	}
+
 	private class Standby : StateBase<GrowMain>
 	{
 		public Standby(GrowMain _machine) : base(_machine)
@@ -74,6 +84,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public TrainingList(GrowMain _machine) : base(_machine)
 		{
 		}
+
 		public override void OnEnterState()
 		{
 			m_selectTrainingLevel = null;
@@ -83,7 +94,6 @@ public class GrowMain : StateMachineBase<GrowMain>
 			{
 				icon.ShowUp(0);
 			}
-
 			machine.m_hudGrow.m_btnBack.onClick.AddListener(() =>
 			{
 				machine.SetState(new GrowMain.TopMenu(machine));
@@ -98,7 +108,13 @@ public class GrowMain : StateMachineBase<GrowMain>
 				else
 				{
 					m_selectTrainingLevel = value;
-					machine.m_hudGrow.UpTrainingButton(value);
+
+					int iFailRate = machine.CalcFailRate(
+						m_selectTrainingLevel,
+						DataManager.Instance.unitTrainingParam.stamina);
+
+					machine.m_hudGrow.UpTrainingButton(value , iFailRate);
+
 					MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
 					p.training_type == value.training_type && p.training_level == value.level);
 					foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
@@ -130,25 +146,40 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public override void OnEnterState()
 		{
 			base.OnEnterState();
-			Debug.Log(m_trainingLevel.training_name);
-			Debug.Log(m_trainingLevel.level);
+			//Debug.Log(m_trainingLevel.training_name);
+			//Debug.Log(m_trainingLevel.level);
+			int iFailRate = machine.CalcFailRate(
+				m_trainingLevel,
+				DataManager.Instance.unitTrainingParam.stamina);
 
+			int iRand = Random.Range(0, 100);
+			// 成功したら
+
+			bool bIsSuccess = iFailRate < iRand;
 			MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
 			p.training_type == m_trainingLevel.training_type && p.training_level == m_trainingLevel.level);
 
-			machine.unitTrainingParam.BuildTraining(param);
+			if (bIsSuccess)
+			{
+				machine.unitTrainingParam.BuildTraining(param);
+			}
+			else
+			{
+				// 失敗した処理
+			}
 
+			// スタミナは成功失敗に関わらず減らす
 			DataManager.Instance.unitTrainingParam.stamina += param.training_cost;
 			machine.m_hudGrow.m_slStamina.SetValue(
 				DataManager.Instance.unitTrainingParam.stamina
 			);
+
 
 			foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
 			{
 				icon.ShowUp(0);
 				icon.SetParam(machine.unitTrainingParam);
 			}
-
 			machine.SetState(new GrowMain.TopMenu(machine));
 		}
 

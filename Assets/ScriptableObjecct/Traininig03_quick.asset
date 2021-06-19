@@ -15,3 +15,4 @@ MonoBehaviour:
   training_type: quick
   training_name: "\u30B7\u30E3\u30C8\u30EB\u30E9\u30F3"
   level: 1
+  fail_start: 55

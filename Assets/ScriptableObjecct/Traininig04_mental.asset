@@ -15,3 +15,4 @@ MonoBehaviour:
   training_type: mental
   training_name: "\u3081\u3044\u305D\u3046"
   level: 1
+  fail_start: 30

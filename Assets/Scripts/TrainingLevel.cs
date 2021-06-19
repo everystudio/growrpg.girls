@@ -8,6 +8,7 @@ public class TrainingLevel : ScriptableObject
 	public string training_type;
 	public string training_name;
 	public int level;
+	public int fail_start;
 }
 
 

@@ -15,3 +15,4 @@ MonoBehaviour:
   training_type: intelligence
   training_name: "\u52C9\u5F37"
   level: 1
+  fail_start: 45

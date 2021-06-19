@@ -19,6 +19,7 @@ public class BtnTraining : MonoBehaviour
 	[HideInInspector] public TextMeshProUGUI m_txtLevel;
 	[HideInInspector] public TextMeshProUGUI m_txtTrainingMenu;
 	private Animator m_animator;
+	private TextMeshProUGUI m_txtFailRate;
 
 	private void Awake()
 	{
@@ -30,6 +31,7 @@ public class BtnTraining : MonoBehaviour
 		});
 		m_txtLevel = transform.Find("txtLevel").GetComponent<TextMeshProUGUI>();
 		m_txtTrainingMenu = transform.Find("txtTrainingMenu").GetComponent<TextMeshProUGUI>();
+		m_txtFailRate = transform.Find("imgFukidashi/txtFailRate").GetComponent<TextMeshProUGUI>();
 	}
 	public void ShowUpdate()
 	{
@@ -41,9 +43,12 @@ public class BtnTraining : MonoBehaviour
 
 		m_txtTrainingMenu.text = param.training_name;
 	}
-	public void IsUp(bool _bFlag)
+	public void IsUp(bool _bFlag, int _iFailRate)
 	{
 		m_animator.SetBool("isUp", _bFlag);
+		if (_bFlag)
+		{
+			m_txtFailRate.text = $"{_iFailRate}%";
+		}
 	}
-
 }
