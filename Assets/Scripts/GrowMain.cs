@@ -37,9 +37,9 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public Standby(GrowMain _machine) : base(_machine)
 		{
 		}
-		public override void OnUpdateState()
+		public override IEnumerator OnEnterStateEnumerator()
 		{
-			base.OnUpdateState();
+			yield return null;
 			machine.SetState(new GrowMain.TopMenu(machine));
 		}
 	}
@@ -53,6 +53,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public override void OnEnterState()
 		{
 			UIAssistant.Instance.ShowPage("main");
+			machine.m_hudGrow.m_goCover.SetActive(false);
 
 			foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
 			{
@@ -62,6 +63,10 @@ public class GrowMain : StateMachineBase<GrowMain>
 			machine.m_hudGrow.m_btnTraining.onClick.AddListener(() =>
 			{
 				machine.SetState(new GrowMain.TrainingList(machine));
+			});
+			machine.m_hudGrow.m_btnRest.onClick.AddListener(() =>
+			{
+				machine.SetState(new GrowMain.RestCheck(machine));
 			});
 
 			// スタミナ(体力)の表示設定
@@ -74,6 +79,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public override void OnExitState()
 		{
 			machine.m_hudGrow.m_btnTraining.onClick.RemoveAllListeners();
+			machine.m_hudGrow.m_btnRest.onClick.RemoveAllListeners();
 		}
 
 	}
@@ -139,6 +145,8 @@ public class GrowMain : StateMachineBase<GrowMain>
 	private class TrainingExe : StateBase<GrowMain>
 	{
 		private TrainingLevel m_trainingLevel;
+		private float m_fTime;
+		private bool m_bResult;
 		public TrainingExe(GrowMain machine, TrainingLevel value) : base(machine)
 		{
 			m_trainingLevel = value;
@@ -146,6 +154,12 @@ public class GrowMain : StateMachineBase<GrowMain>
 		public override void OnEnterState()
 		{
 			base.OnEnterState();
+			m_fTime = 0.0f;
+			machine.m_hudGrow.m_trainingResultBoard.SetActive(true);
+			machine.m_hudGrow.m_trainingResultBoard.GetComponent<Animator>().Play("round");
+
+			machine.m_hudGrow.UpdateTrainingList();
+			machine.m_hudGrow.m_goCover.SetActive(true);
 			//Debug.Log(m_trainingLevel.training_name);
 			//Debug.Log(m_trainingLevel.level);
 			int iFailRate = machine.CalcFailRate(
@@ -155,18 +169,9 @@ public class GrowMain : StateMachineBase<GrowMain>
 			int iRand = Random.Range(0, 100);
 			// 成功したら
 
-			bool bIsSuccess = iFailRate < iRand;
+			m_bResult = iFailRate < iRand;
 			MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
 			p.training_type == m_trainingLevel.training_type && p.training_level == m_trainingLevel.level);
-
-			if (bIsSuccess)
-			{
-				machine.unitTrainingParam.BuildTraining(param);
-			}
-			else
-			{
-				// 失敗した処理
-			}
 
 			// スタミナは成功失敗に関わらず減らす
 			DataManager.Instance.unitTrainingParam.stamina += param.training_cost;
@@ -174,15 +179,98 @@ public class GrowMain : StateMachineBase<GrowMain>
 				DataManager.Instance.unitTrainingParam.stamina
 			);
 
-
 			foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
 			{
 				icon.ShowUp(0);
 				icon.SetParam(machine.unitTrainingParam);
 			}
-			machine.SetState(new GrowMain.TopMenu(machine));
+		}
+		public override void OnUpdateState()
+		{
+			m_fTime += Time.deltaTime;
+			if( 2.0f < m_fTime)
+			{
+				MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
+				p.training_type == m_trainingLevel.training_type && p.training_level == m_trainingLevel.level);
+				if (m_bResult)
+				{
+					machine.SetState(new GrowMain.TrainingSuccess(machine, param));
+					//machine.unitTrainingParam.BuildTraining(param);
+				}
+				else
+				{
+					// 失敗した処理
+					machine.SetState(new GrowMain.TrainingFail(machine, param));
+				}
+			}
 		}
 
 	}
 
+	private class TrainingSuccess : StateBase<GrowMain>
+	{
+		private MasterTrainingParam param;
+
+		public TrainingSuccess(GrowMain machine, MasterTrainingParam param):base(machine)
+		{
+			this.machine = machine;
+			this.param = param;
+		}
+		public override IEnumerator OnEnterStateEnumerator()
+		{
+			//Debug.Log("TrainingSuccess");
+			machine.m_hudGrow.m_trainingResultBoard.GetComponent<Animator>().SetTrigger("success");
+			machine.unitTrainingParam.BuildTraining(param);
+			yield return new WaitForSeconds(2.0f);
+			machine.m_hudGrow.m_trainingResultBoard.SetActive(false);
+			machine.SetState(new GrowMain.TopMenu(machine));
+		}
+	}
+
+	private class TrainingFail : StateBase<GrowMain>
+	{
+		private MasterTrainingParam param;
+
+		public TrainingFail(GrowMain machine, MasterTrainingParam param):base(machine)
+		{
+			this.machine = machine;
+			this.param = param;
+		}
+		public override IEnumerator OnEnterStateEnumerator()
+		{
+			machine.m_hudGrow.m_trainingResultBoard.GetComponent<Animator>().SetTrigger("fail");
+			yield return new WaitForSeconds(2.0f);
+			machine.m_hudGrow.m_trainingResultBoard.SetActive(false);
+			machine.SetState(new GrowMain.TopMenu(machine));
+		}
+	}
+
+	private class RestCheck : StateBase<GrowMain>
+	{
+		public RestCheck(GrowMain _machine) : base(_machine)
+		{
+		}
+		public override void OnEnterState()
+		{
+			base.OnEnterState();
+			UIAssistant.Instance.ShowPage("rest_check");
+
+			machine.m_hudGrow.m_btnRestCancel.onClick.AddListener(() =>
+			{
+				//UIAssistant.Instance.ShowParentPage();
+				machine.SetState(new GrowMain.TopMenu(machine));
+			});
+			machine.m_hudGrow.m_btnRestDecide.onClick.AddListener(() =>
+			{
+
+			});
+
+		}
+		public override void OnExitState()
+		{
+			base.OnExitState();
+			machine.m_hudGrow.m_btnRestCancel.onClick.RemoveAllListeners();
+			machine.m_hudGrow.m_btnRestDecide.onClick.RemoveAllListeners();
+		}
+	}
 }

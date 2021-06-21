@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GrowHUD : MonoBehaviour
 {
 	public Button m_btnBack;
+	public Button m_btnRest;
 	public Button m_btnTraining;
 
 	public List<BtnTraining> m_btnTrainingList;
@@ -14,6 +15,14 @@ public class GrowHUD : MonoBehaviour
 	public List<IconStatus> m_iconStatusList;
 
 	public SliderController m_slStamina;
+
+	public GameObject m_trainingResultBoard;
+	public GameObject m_goCover;
+
+	#region おやすみ関連
+	public Button m_btnRestCancel;
+	public Button m_btnRestDecide;
+	#endregion
 
 	private void Awake()
 	{
@@ -32,14 +41,20 @@ public class GrowHUD : MonoBehaviour
 		{
 			btn.ShowUpdate();
 		}
+		UpTrainingButton(null, 0);
 	}
 
 	public void UpTrainingButton(TrainingLevel _trainingLevel , int _iFailRate )
 	{
 		foreach( BtnTraining btn in m_btnTrainingList)
 		{
+			bool bUpFlag = false;
+			if(_trainingLevel != null)
+			{
+				bUpFlag = btn.trainingLevel.training_type == _trainingLevel.training_type;
+			}
 			btn.IsUp(
-				btn.trainingLevel.training_type == _trainingLevel.training_type ,
+				 bUpFlag,
 				_iFailRate);
 		}
 	}

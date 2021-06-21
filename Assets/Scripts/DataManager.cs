@@ -28,6 +28,6 @@ public class DataManager : Singleton<DataManager>
 			Debug.LogError("デバッグ用のデータ数に誤りがあります。一人だけですよ");
 		}
 
-		Debug.Log(unitTrainingParam.stamina);
+		//Debug.Log(unitTrainingParam.stamina);
 	}
 }

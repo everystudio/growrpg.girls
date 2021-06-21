@@ -35,6 +35,7 @@ public class BtnTraining : MonoBehaviour
 	}
 	public void ShowUpdate()
 	{
+		//Debug.Log("ShowUpdate");
 		m_txtLevel.text = $"Level.{m_trainingLevel.level}";
 		//Debug.Log(m_trainingLevel.training_type);
 		MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p => 
