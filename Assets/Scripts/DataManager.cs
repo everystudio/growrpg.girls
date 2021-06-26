@@ -7,7 +7,8 @@ public class DataManager : Singleton<DataManager>
 {
 	public TextAsset m_taMasterTraining;
 	public MasterTraining masterTraining;
-
+	public TextAsset m_taDataTrainingLevel;
+	public DataTrainingLevel data_training_level;
 
 	public TextAsset m_taDataUnitTrainingParam;
 	public DataUnitTrainingParam unitTrainingParam; 
@@ -16,6 +17,9 @@ public class DataManager : Singleton<DataManager>
 		base.Initialize();
 		masterTraining = new MasterTraining();
 		masterTraining.Load(m_taMasterTraining);
+
+		data_training_level = new DataTrainingLevel();
+		data_training_level.Load(m_taDataTrainingLevel);
 
 		DataUnitTraining dataUnitTraining = new DataUnitTraining();
 		dataUnitTraining.Load(m_taDataUnitTrainingParam);

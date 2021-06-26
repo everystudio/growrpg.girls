@@ -44,7 +44,7 @@ public class GrowHUD : MonoBehaviour
 		UpTrainingButton(null, 0);
 	}
 
-	public void UpTrainingButton(TrainingLevel _trainingLevel , int _iFailRate )
+	public void UpTrainingButton(DataTrainingLevelParam _trainingLevel , int _iFailRate )
 	{
 		foreach( BtnTraining btn in m_btnTrainingList)
 		{

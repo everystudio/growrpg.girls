@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Reflection;
+#pragma warning disable CS0649
 
 public class IconStatus : MonoBehaviour
 {

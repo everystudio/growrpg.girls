@@ -689,7 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7424f2224b984ae4a989d4788d55d9aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trainingLevel: {fileID: 11400000, guid: 5bd6ec44cc0f204499a0ec142212693b, type: 2}
+  training_type: stamina
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!95 &103508003
@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7424f2224b984ae4a989d4788d55d9aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trainingLevel: {fileID: 11400000, guid: 956ef7fe5fcf7374e96026d2c9602bf2, type: 2}
+  training_type: power
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!95 &145959642
@@ -4557,7 +4557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7424f2224b984ae4a989d4788d55d9aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trainingLevel: {fileID: 11400000, guid: 5534e71a3c399db4e8e8a45a71254c23, type: 2}
+  training_type: quick
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!95 &533566805
@@ -7629,6 +7629,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_taMasterTraining: {fileID: 4900000, guid: 1ba6a80fa071d604dbdff2b1425d3a78, type: 3}
+  m_taDataTrainingLevel: {fileID: 4900000, guid: 17c75eee13e2b2b438d03cfd1463d915,
+    type: 3}
   m_taDataUnitTrainingParam: {fileID: 4900000, guid: 041a5d44e34a6f148bda3c08c5b9e532,
     type: 3}
 --- !u!4 &844264605
@@ -7780,7 +7782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7424f2224b984ae4a989d4788d55d9aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trainingLevel: {fileID: 11400000, guid: 6aab70f91fb8bc24e899dbc2ff6f202f, type: 2}
+  training_type: mental
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!95 &847103748
@@ -9376,7 +9378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7424f2224b984ae4a989d4788d55d9aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trainingLevel: {fileID: 11400000, guid: f2f8992267da02647ab2939e8de5ea76, type: 2}
+  training_type: intelligence
   m_txtLevel: {fileID: 0}
   m_txtTrainingMenu: {fileID: 0}
 --- !u!95 &1044300766
@@ -10023,6 +10025,14 @@ MonoBehaviour:
     setTimeScale: 1
     timeScale: 1
     parent_page: main
+  - name: training_exe
+    panels: []
+    ignoring_panels: []
+    soundtrack: '-'
+    default_page: 0
+    setTimeScale: 1
+    timeScale: 1
+    parent_page: 
 --- !u!4 &1123032336
 Transform:
   m_ObjectHideFlags: 0

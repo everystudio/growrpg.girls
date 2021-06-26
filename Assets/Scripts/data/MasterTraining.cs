@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using anogamelib;
+using System;
 
 public class MasterTrainingParam : CsvDataParam
 {
@@ -16,8 +17,14 @@ public class MasterTrainingParam : CsvDataParam
 	public int wisdom;
 	public int luck;
 	public int training_cost;
+	public int fail_start;
 }
 
 public class MasterTraining : CsvData<MasterTrainingParam>
 {
+	public MasterTrainingParam Get(DataTrainingLevelParam level)
+	{
+		return list.Find(p => p.training_type == level.training_type &&
+		p.training_level == level.training_level);
+	}
 }

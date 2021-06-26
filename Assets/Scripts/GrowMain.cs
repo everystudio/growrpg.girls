@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using anogamelib;
 using System.Reflection;
 
+#pragma warning disable CS0649
+
 public class GrowMain : StateMachineBase<GrowMain>
 {
 	public UnityEvent e = new UnityEvent();
@@ -22,12 +24,15 @@ public class GrowMain : StateMachineBase<GrowMain>
 		SetState(new GrowMain.Standby(this));
 	}
 
-	private int CalcFailRate(TrainingLevel _level, int _iStamina)
+	private int CalcFailRate(DataTrainingLevelParam _level, int _iStamina)
 	{
 		int iFailRate = 0;
-		if (_iStamina < _level.fail_start)
+
+		MasterTrainingParam masterTrainingParam = DataManager.Instance.masterTraining.Get(_level);
+
+		if (_iStamina < masterTrainingParam.fail_start)
 		{
-			iFailRate = (int)Mathf.Lerp(99, 0, (float)_iStamina / (float)_level.fail_start);
+			iFailRate = (int)Mathf.Lerp(99, 0, (float)_iStamina / (float)masterTrainingParam.fail_start);
 		}
 		return iFailRate;
 	}
@@ -86,7 +91,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 
 	private class TrainingList : StateBase<GrowMain>
 	{
-		private TrainingLevel m_selectTrainingLevel;
+		private DataTrainingLevelParam m_selectTrainingLevel;
 		public TrainingList(GrowMain _machine) : base(_machine)
 		{
 		}
@@ -121,8 +126,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 
 					machine.m_hudGrow.UpTrainingButton(value , iFailRate);
 
-					MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
-					p.training_type == value.training_type && p.training_level == value.level);
+					MasterTrainingParam param = DataManager.Instance.masterTraining.Get(value);
 					foreach (IconStatus icon in machine.m_hudGrow.m_iconStatusList)
 					{
 						FieldInfo info = param.GetType().GetField(icon.paramName);
@@ -144,16 +148,19 @@ public class GrowMain : StateMachineBase<GrowMain>
 
 	private class TrainingExe : StateBase<GrowMain>
 	{
-		private TrainingLevel m_trainingLevel;
+		private DataTrainingLevelParam m_trainingLevel;
 		private float m_fTime;
 		private bool m_bResult;
-		public TrainingExe(GrowMain machine, TrainingLevel value) : base(machine)
+		public TrainingExe(GrowMain machine, DataTrainingLevelParam value) : base(machine)
 		{
 			m_trainingLevel = value;
 		}
 		public override void OnEnterState()
 		{
 			base.OnEnterState();
+
+			UIAssistant.Instance.ShowPage("training_exe");
+
 			m_fTime = 0.0f;
 			machine.m_hudGrow.m_trainingResultBoard.SetActive(true);
 			machine.m_hudGrow.m_trainingResultBoard.GetComponent<Animator>().Play("round");
@@ -170,8 +177,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 			// 成功したら
 
 			m_bResult = iFailRate < iRand;
-			MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
-			p.training_type == m_trainingLevel.training_type && p.training_level == m_trainingLevel.level);
+			MasterTrainingParam param = DataManager.Instance.masterTraining.Get(m_trainingLevel);
 
 			// スタミナは成功失敗に関わらず減らす
 			DataManager.Instance.unitTrainingParam.stamina += param.training_cost;
@@ -190,8 +196,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 			m_fTime += Time.deltaTime;
 			if( 2.0f < m_fTime)
 			{
-				MasterTrainingParam param = DataManager.Instance.masterTraining.list.Find(p =>
-				p.training_type == m_trainingLevel.training_type && p.training_level == m_trainingLevel.level);
+				MasterTrainingParam param = DataManager.Instance.masterTraining.Get(m_trainingLevel);
 				if (m_bResult)
 				{
 					machine.SetState(new GrowMain.TrainingSuccess(machine, param));
@@ -262,7 +267,7 @@ public class GrowMain : StateMachineBase<GrowMain>
 			});
 			machine.m_hudGrow.m_btnRestDecide.onClick.AddListener(() =>
 			{
-
+				machine.SetState(new GrowMain.RestExe(machine));
 			});
 
 		}
@@ -271,6 +276,18 @@ public class GrowMain : StateMachineBase<GrowMain>
 			base.OnExitState();
 			machine.m_hudGrow.m_btnRestCancel.onClick.RemoveAllListeners();
 			machine.m_hudGrow.m_btnRestDecide.onClick.RemoveAllListeners();
+		}
+	}
+
+	private class RestExe : StateBase<GrowMain>
+	{
+		public RestExe(GrowMain _machine) : base(_machine)
+		{
+		}
+		public override IEnumerator OnEnterStateEnumerator()
+		{
+			yield return new WaitForSeconds(2.0f);
+			machine.SetState(new GrowMain.TopMenu(machine));
 		}
 	}
 }
